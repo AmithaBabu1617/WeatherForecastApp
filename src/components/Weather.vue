@@ -26,17 +26,17 @@
         </div>
       </div>
       <div v-if="activetab === '2'" class="weather__tab-content">
-        <div v-if="forecast && Object.keys(forecast).length > 0">
-          <p>{{ forecast.city ? forecast.city.name : "" }}</p>
-          <p>{{ forecast.city ? forecast.city.country : "" }}</p>
+        <div v-if="forecastList && forecastList.length > 0">
+          <p>{{ weather.name }}</p>
+          <p>{{ weather.sys.country }}</p>
           <ul class="weather__forecast_list">
-            <li v-for="temp of forecast.list" :key="`weather_${temp.dt_txt}`">
+            <li v-for="item in forecastList" :key="`weather_${item.dt}`">
               <div class="icon">
-                <img :src="`${weather_icon}${temp.weather[0].icon}${'.png'}`" />
+                <img :src="`${weather_icon}${item.weather[0].icon}${'.png'}`" />
               </div>
-              <p>Average Temp: <br />{{ Math.round(temp.main.temp) }}°c</p>
-              <p>{{ temp.weather[0].description }}</p>
-              <p>{{ temp.dt_txt.split(" ")[0] }}</p>
+              <p>Average Temp: <br />{{ Math.round(item.temp.day.toFixed(0)) }}°c</p>
+              <p>{{ item.weather[0].description }}</p>
+              <p>{{ JSON.stringify(new Date(item.dt * 1000)).slice(1, 11) }}</p>
             </li>
           </ul>
         </div>
@@ -59,11 +59,12 @@ export default {
   data() {
     return {
       activetab: "1",
-      apiUrl: "https://api.openweathermap.org/data/2.5/",
+      apiKey: "5fccd9095b0f55efa129c6ec9a717b04",
+      apiUrl: "https://api.openweathermap.org/data/2.5",
       place: "",
       weather: {},
       weather_icon: "http://openweathermap.org/img/wn/",
-      forecast: {},
+      forecastList: {},
       showModal: false
     }
   },
@@ -76,13 +77,17 @@ export default {
     },
     async fetchWeather() {
       if (this.place.length > 1) {
-        this.fetchCurrentWeather()
-        this.fetchSevenDaysWeather()
+        await this.fetchCurrentWeather()
+        await this.fetchSevenDaysWeather()
       }
     },
+    getGeoCode() {
+      return axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${this.place}&appid=${this.apiKey}`)
+    },
     async fetchCurrentWeather() {
-      await axios
-        .get(`${this.apiUrl}weather?q=${this.place}&units=metric&APPID=27bcc252742830381afd6856832da01a`)
+      let codes = await this.getGeoCode()
+      axios
+        .get(`${this.apiUrl}/weather?lat=${codes.data[0].lat}&lon=${codes.data[0].lon}&units=metric&APPID=${this.apiKey}`)
         .then(res => {
           this.weather = res.data
         })
@@ -92,16 +97,17 @@ export default {
         })
     },
     async fetchSevenDaysWeather() {
-      await axios
+      let codes = await this.getGeoCode()
+      axios
         .get(
-          `${this.apiUrl}forecast?q=${this.place}&cnt=7&units=metric&exclude=current,minutely,hourly,alerts&appid=27bcc252742830381afd6856832da01a`
+          `${this.apiUrl}/onecall?lat=${codes.data[0].lat}&lon=${codes.data[0].lon}&exclude=current,hourly,minutely,alerts&units=metric&appid=${this.apiKey}`
         )
         .then(res => {
-          this.forecast = res.data
+          this.forecastList = res.data.daily.slice(1)
         })
         .catch(error => {
           console.log(error.response)
-          this.forecast = {}
+          this.forecastList = {}
         })
     }
   }

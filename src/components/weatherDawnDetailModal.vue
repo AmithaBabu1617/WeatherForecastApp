@@ -2,6 +2,7 @@
   <div class="modal-backdrop">
     <div class="modal">
       <header class="modal-header">
+        <h4 style="margin:0px">Details</h4>
         <button type="button" class="btn-close" @click="close">
           x
         </button>
@@ -55,7 +56,6 @@ export default {
 
 .modal-header {
   position: relative;
-  color: #4aae9b;
   justify-content: space-between;
 }
 
