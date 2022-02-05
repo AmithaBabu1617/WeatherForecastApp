@@ -2,7 +2,7 @@
   <div class="modal-backdrop">
     <div class="modal">
       <header class="modal-header">
-        <h4 style="margin:0px">Details</h4>
+        <h3 style="margin:0px">Sunrise and Sunset Timing Details</h3>
         <button type="button" class="btn-close" @click="close">
           x
         </button>
@@ -25,7 +25,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -46,6 +46,9 @@ export default {
   flex-direction: column;
   width: 400px;
   height: 200px;
+  @media only screen and (max-width: 719px) {
+    width: 300px;
+  }
 }
 
 .modal-header,
@@ -57,6 +60,7 @@ export default {
 .modal-header {
   position: relative;
   justify-content: space-between;
+  border-bottom: 1px solid #ccc;
 }
 
 .modal-body {

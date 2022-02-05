@@ -7,13 +7,19 @@
       </button>
     </div>
     <div class="weather__tabs" id="weather__tabs">
-      <a @click="activetab = '1'" :class="[activetab === '1' ? 'active' : '']">Current</a>
-      <a @click="activetab = '2'" :class="[activetab === '2' ? 'active' : '']">7 day forecast</a>
+      <a @click="activetab = '1'" :class="[activetab === '1' ? 'active' : '']">
+        Current
+      </a>
+      <a @click="activetab = '2'" :class="[activetab === '2' ? 'active' : '']">
+        7 day forecast
+      </a>
     </div>
     <div class="content">
       <div v-if="activetab === '1'" class="weather__tab-content">
         <div v-if="typeof weather.main != 'undefined'">
-          <div class="weather_details" @click="showModal = true">{{ weather.name }}</div>
+          <div class="weather_city-name" @click="showModal = true">
+            {{ weather.name }}
+          </div>
           <p>{{ weather.sys.country }}</p>
           <div class="icon">
             <img :src="`${weather_icon}${weather.weather[0].icon}${'.png'}`" />
@@ -45,9 +51,15 @@
         </div>
       </div>
     </div>
-    <Modal v-if="showModal" @close="closeModal">
-      <h5>Sunrises on :{{ new Date(weather.sys.sunrise).toLocaleTimeString() }}</h5>
-      <h5>SunSets on :{{ new Date(weather.sys.sunset).toLocaleTimeString() }}</h5>
+    <Modal v-if="showModal" @close="closeModal" class="weather__modal">
+      <p>
+        <img src="../assets/sunrise.png" width="55px" />
+        Sunrises on {{ new Date(weather.sys.sunrise).toLocaleTimeString() }}
+      </p>
+      <p>
+        <img src="../assets/sunset.png" width="50px" />
+        SunSets on {{ new Date(weather.sys.sunset).toLocaleTimeString() }}
+      </p>
     </Modal>
   </div>
 </template>
@@ -203,6 +215,20 @@ export default {
       padding-bottom: 5px;
       span {
         color: #aaaaaad4;
+      }
+    }
+  }
+  &_city-name {
+    cursor: pointer;
+  }
+  &__modal {
+    p {
+      margin: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        margin-right: 5px;
       }
     }
   }
