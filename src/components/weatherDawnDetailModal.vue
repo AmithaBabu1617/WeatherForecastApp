@@ -1,14 +1,13 @@
 <template>
-  <div class="modal-backdrop">
-    <div class="modal">
-      <header class="modal-header">
+  <div :class="$style.modalBackdrop">
+    <div :class="$style.modal">
+      <header :class="$style.modal__header">
         <h3 style="margin:0px">Sunrise and Sunset Timing Details</h3>
-        <button type="button" class="btn-close" @click="close">
+        <button type="button" :class="$style.modal__closeBtn" @click="close">
           x
         </button>
       </header>
-
-      <section class="modal-body">
+      <section :class="$style.modal__body">
         <slot></slot>
       </section>
     </div>
@@ -25,8 +24,8 @@ export default {
 }
 </script>
 
-<style lang="less">
-.modal-backdrop {
+<style lang="less" module>
+.modalBackdrop {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -45,39 +44,35 @@ export default {
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: 200px;
+  height: 300px;
   @media only screen and (max-width: 719px) {
     width: 300px;
   }
-}
-
-.modal-header,
-.modal-footer {
-  padding: 15px;
-  display: flex;
-}
-
-.modal-header {
-  position: relative;
-  justify-content: space-between;
-  border-bottom: 1px solid #ccc;
-}
-
-.modal-body {
-  position: relative;
-  padding: 20px 10px;
-}
-
-.btn-close {
-  position: absolute;
-  top: 0;
-  right: 0;
-  border: none;
-  font-size: 20px;
-  padding: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  color: #2196f3;
-  background: transparent;
+  &__header,
+  &__footer {
+    padding: 15px;
+    display: flex;
+  }
+  &__header {
+    position: relative;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+  }
+  &__body {
+    position: relative;
+    padding: 20px 10px;
+  }
+  &__closeBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #2196f3;
+    background: transparent;
+  }
 }
 </style>
